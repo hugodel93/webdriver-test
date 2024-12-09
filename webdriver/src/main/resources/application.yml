@@ -1,0 +1,6 @@
+webdriver:
+  driver: chrome
+  chrome:
+    driver-path: C:\Users\Harrison\Downloads\chromedriver-win64\chromedriver.exe
+  gecko:
+    driver-path: /path/to/geckodriver
