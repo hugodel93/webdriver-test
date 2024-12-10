@@ -1,7 +1,6 @@
-package com.harrison.webdriver;
+package com.harrison.webdriver.newmis;
 
-import com.harrison.webdriver.monitor.page.DashboardPage;
-import com.harrison.webdriver.monitor.page.LoginPage;
+import com.harrison.webdriver.newmis.page.NewmisLoginPage;
 import com.harrison.webdriver.util.ScreenshotUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,44 +15,34 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /***
- * @Title WebDriverTest
+ * @Title LogTest
  * @Description:
  * @author: hang.hu
- * @date: 2024/12/9 17:27
+ * @date: 2024/12/10 14:58
  * @version: 1.0.0
  **/
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class WebDriverTest {
+public class LogTest {
+
+    @Autowired
+    NewmisLoginPage loginPage;
 
     @Autowired
     private WebDriver driver;
 
-    @Autowired
-    private LoginPage loginPage;
-
-    @Autowired
-    private DashboardPage dashboardPage;
-
-
     @BeforeAll
     public void setUp() {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("https://10.253.164.113:8888/#/login");
+        driver.get("https://ksgmis.kingstartech.com/newmis");
     }
 
     @Test
     public void testLogin() {
-        loginPage.login("admin", "Admin!123");
-        assertTrue(driver.getCurrentUrl().contains("dept"));
-        ScreenshotUtil.shot("login_success_page.png");
-    }
+        loginPage.login("5616", "1wsx2qaz@");
 
-    @Test
-    public void testDashboard() {
-        dashboardPage.open();
-        dashboardPage.fullScreen();
-        dashboardPage.setRefreshTime("10");
+//        assertTrue(driver.getCurrentUrl().contains("dept"));
+        ScreenshotUtil.shot("login_success_page.png");
     }
 
     @AfterAll
@@ -62,4 +51,5 @@ public class WebDriverTest {
             driver.quit();
         }
     }
+
 }

@@ -4,12 +4,13 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +22,14 @@ import java.io.IOException;
  * @date: 2024/12/9 16:08
  * @version: 1.0.0
  **/
-public class WebDriverTest {
+@SpringBootApplication
+public class WebDriverApp {
 
     public static void main(String[] args) {
+        SpringApplication.run(WebDriverApp.class, args);
+    }
+
+    public static void demo() {
         // 设置 ChromeDriver 的路径（确保已经下载了 ChromeDriver）
         // https://sites.google.com/chromium.org/driver/downloads
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Harrison\\Downloads\\chromedriver-win64\\chromedriver.exe");
@@ -36,7 +42,7 @@ public class WebDriverTest {
         options.addArguments("--disable-web-security"); // 禁用网页安全检查（适用于一些开发场景）
 
         // 创建 ChromeDriver 实例
-        WebDriver driver = new ChromeDriver(options);
+        org.openqa.selenium.WebDriver driver = new ChromeDriver(options);
 
         try {
             // 打开网页
@@ -68,6 +74,12 @@ public class WebDriverTest {
             // WebDriverWait 或者其他等待机制可以根据实际情况使用
             // 使用 WebDriverWait 等待页面加载，确保某个元素出现，最大等待10秒
             WebDriverWait wait2 = new WebDriverWait(driver, 10);
+            //visibilityOfElementLocated：等待元素可见。
+            //elementToBeClickable：等待元素可点击。
+            //presenceOfElementLocated：等待元素出现在 DOM 中。
+            //alertIsPresent：等待弹窗出现。
+            //textToBePresentInElement：等待某个元素的文本满足特定条件。
+            //visibilityOf：等待某个元素可见
             WebElement userToolsIcon = wait2.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("div.user-tools-icon.pointer.ks-icon-status-out")
             ));

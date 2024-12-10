@@ -22,14 +22,15 @@ public class WebDriverConfig {
     @Value("${webdriver.driver}")
     private String driverType;
 
-    @Value("${webdriver.chrome.driver}")
+    @Value("${webdriver.chrome.driver-path}")
     private String chromeDriverPath;
 
-    @Value("${webdriver.gecko.driver}")
+    @Value("${webdriver.gecko.driver-path}")
     private String geckoDriverPath;
 
     @Bean
-    @Scope("prototype") // 每个测试用例使用一个独立的 WebDriver 实例
+    @Scope("singleton") //所有测试案例共同使用一个 WebDriver 实例
+//    @Scope("prototype") // 每个测试用例使用一个独立的 WebDriver 实例
     public WebDriver webDriver() {
         if ("chrome".equalsIgnoreCase(driverType)) {
             System.setProperty("webdriver.chrome.driver", chromeDriverPath);
