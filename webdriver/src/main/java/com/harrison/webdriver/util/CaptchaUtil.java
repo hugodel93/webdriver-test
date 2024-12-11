@@ -10,7 +10,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,6 +27,7 @@ public class CaptchaUtil {
         System.out.println("-->" + doRecognize(file, "", "jpg", "30"));
     }
 
+
     /**
      * file: 图片文件
      * rectangle: 图片中需要识别的区域。如new Rectangle(x, y, w, h), 坐标及宽高
@@ -35,7 +35,7 @@ public class CaptchaUtil {
      * formateName: file文件的格式。如 JPG, PNG, DICOM等,
      * dpi: tesseractOcr识别时传入的参数。如：tesseract.setVariable("user_defined_dpi", dpi);
      */
-    public static String doRecognize(File file, String dataPath, String formateName, String dpi)  {
+    public static String doRecognize(File file, String dataPath, String formateName, String dpi) {
         if (!file.exists()) {
             System.err.println("待识别文件不存在");
             return "";
@@ -53,9 +53,9 @@ public class CaptchaUtil {
         return "";
     }
 
-    public static String doRecognize(BufferedImage img, String dataPath, String formateName, String dpi)  {
+    public static String doRecognize(BufferedImage img, String dataPath, String dpi) {
         try {
-            return doOcrImpl(img, dataPath, true, dpi, true);
+            return doOcrImpl(img, dataPath, true, dpi, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,10 +101,9 @@ public class CaptchaUtil {
     private static String doOcrImpl(BufferedImage img, String dataPath, boolean replacedEmp, String dpi, boolean charNoLimit) throws TesseractException {
         //简单的灰度化和二值化
         BufferedImage subImage = preprocessImage(img);
-        //处理黑边
-//            subImage = removeBlackBorder(subImage);
-        int bold = 1;
-        Rectangle region = new Rectangle(bold, bold, img.getWidth() - bold, img.getHeight() - bold);
+        //处理黑边 subImage = removeBlackBorder(subImage);
+        int bold = 2;
+        Rectangle region = new Rectangle(bold, bold, img.getWidth() - 2*bold, img.getHeight() - 2*bold);
         subImage = subImage.getSubimage(region.x, region.y, region.width, region.height);
 
         // 初始化 OCR 引擎
@@ -119,7 +118,7 @@ public class CaptchaUtil {
         tesseract.setLanguage("eng");
         if (!charNoLimit) {
             //限制只识别数字字母
-            tesseract.setVariable("tessedit_char_whitelist", "0123456789CDFGMRTX");
+            tesseract.setVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
         }
         //设置分辨率
         tesseract.setVariable("user_defined_dpi", dpi);
@@ -129,7 +128,7 @@ public class CaptchaUtil {
             result = result.replace(StrUtil.SPACE, StrUtil.EMPTY).replace(StrUtil.LF, StrUtil.EMPTY);
         }
         // 测试用
-        File outputFile = new File("C:\\Users\\Harrison\\Desktop\\test\\output_image.jpg");
+        File outputFile = new File("C:\\Users\\Harrison\\Desktop\\test\\rst_" + result + ".jpg");
         // 保存为 PNG 格式的文件
         try {
             ImageIO.write(subImage, "JPG", outputFile);

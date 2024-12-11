@@ -33,16 +33,16 @@ public class LogTest {
 
     @BeforeAll
     public void setUp() {
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get("https://ksgmis.kingstartech.com/newmis");
     }
 
     @Test
     public void testLogin() {
         loginPage.login("5616", "1wsx2qaz@");
-
-//        assertTrue(driver.getCurrentUrl().contains("dept"));
-        ScreenshotUtil.shot("login_success_page.png");
+        System.out.println(driver.getCurrentUrl());
+        assertTrue(driver.getCurrentUrl().contains("home"));
+        ScreenshotUtil.shot("loginsuccess.jpg");
     }
 
     @AfterAll
